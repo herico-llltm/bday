@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Surprise for You</title>
+    <style>
+        :root {
+            --envelope-color: #f7a2ec;
+            --envelope-dark: #f5b8f9;
+            --paper-color: #de9ac9;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: orchid;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        /* The Container */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.05);
+        }
+
+        /* The Main Envelope Body */
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: var(--envelope-color);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* The Front Flaps */
+        .envelope::before {
+            content: "";
+            position: absolute;
+            z-index: 2;
+            border-top: 100px solid transparent;
+            border-left: 150px solid var(--envelope-color);
+            border-right: 150px solid var(--envelope-color);
+            border-bottom: 100px solid var(--envelope-dark);
+            bottom: 0;
+            border-radius: 10px;
+        }
+
+        /* The Top Flap (The part that opens) */
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid var(--envelope-color);
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            z-index: 3;
+        }
+
+        /* The Letter inside */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 180px;
+            background: var(--paper-color);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.5s ease;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .letter img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--envelope-color);
+        }
+
+        .letter h2 {
+            font-size: 1.0rem;
+            color: #000000;
+            margin: 10px 0 5px;
+        }
+
+        .letter p {
+            font-size: 0.8rem;
+            color: #290016;
+            line-height: 1.4;
+        }
+
+        /* OPEN STATE */
+        .envelope-wrapper.open .flap {
+            transform: rotateX(180deg);
+            z-index: 0; /* Moves flap behind so letter can slide out */
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translate(-50%, -190px);
+            z-index: 05;
+            initial-letter-align: inherit; /* Slides the letter up */
+        }
+
+        /* Floating Hearts Layer */
+        .heart {
+            position: absolute;
+            color: #ff69b4;
+            animation: float 3s linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="envelope-wrapper" onclick="openEnvelope(this)">
+        <div class="flap"></div>
+        <div class="envelope"></div>
+        <div class="letter">
+            <img src="Her-Image.png.jpg" alt="Her Photo">
+            <h2>Happy Birthdayyyy, My Loveee!</h2>
+            <p> I Love You So Muchhhhh </p>
+            <p style="font-size: 15px;">❤️</p>
+        </div>
+    </div>
+
+    <script>
+        function openEnvelope(element) {
+            element.classList.toggle('open');
+            
+            // Create some hearts when opened
+            if(element.classList.contains('open')) {
+                for(let i=0; i<15; i++) {
+                    setTimeout(createHeart, i * 100);
+                }
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = (Math.random() * 300) + "px";
+            heart.style.top = "50px";
+            document.querySelector('.envelope-wrapper').appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 3000);
+        }
+    </script>
+
+</body>
+</html>
